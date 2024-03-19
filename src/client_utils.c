@@ -41,7 +41,7 @@ void *handle_client(void *arg)
 		buff_out[0] = '\0';
 
 		strip_newline(buff_in);
-		printf("incoming msg from %s: %s\n",client->name, buff_in);
+		//printf("incoming msg from %s: %s\n",client->name, buff_in);
 
 		if (!strlen(buff_in)) //ignore empty buffer
 			continue;
@@ -51,7 +51,7 @@ void *handle_client(void *arg)
 		else
 		{
 			snprintf(buff_out, sizeof(buff_out), "[%s] %s\r\n", client->name, buff_in);
-			printf("outgoing msg from %s: %s\n",client->name, buff_out);
+			//printf("outgoing msg from %s: %s\n",client->name, buff_out);
 			send_message(server, buff_out, client->uid);
 		}
 
