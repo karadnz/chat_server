@@ -48,16 +48,29 @@ typedef struct	s_args
 	t_client	*client;
 } t_args;
 
+enum cmds
+{
+	UNKNOWN,
+	QUIT,
+	PING,
+	TOPIC,
+	NICK,
+	MSG,
+	LIST,
+	HELP
+};
+
 // utils
 void ft_error(const char *msg);
 char *_strdup(const char *s);
 void strip_newline(char *s);
-void print_client_addr(struct sockaddr_in addr);
+void print_addr(struct sockaddr_in addr);
 
 // server
-void init_server(t_server *server, int port);
-void start_server(t_server *server);
+t_server *new_server(int port);
+void server_start(t_server *server);
 
+int handle_cmd(t_server *server, t_client *client, char *buff_out, char *buff_in);
 void client_welcome(t_server *server, t_client *client, char *buff_out);
 void client_goodbye(t_server *server, t_client *client, char *buff_out);
 

@@ -5,7 +5,7 @@ void queue_add(t_server *server, t_client *client)
 	pthread_mutex_lock(&(server->clients_mutex));
 	for (size_t i = 0; i < MAX_CLIENTS; i++)
 	{
-		if(server->clients[i])
+		if(!server->clients[i]) //make better check
 		{
 			server->clients[i] = client;
 			break;

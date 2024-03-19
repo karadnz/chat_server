@@ -9,7 +9,9 @@ t_client *new_client(struct sockaddr_in client_addr, int connfd, int uid)
 	client->connfd = connfd;
 	client->uid = uid;
 
-	sprintf(client->name, "%s", client->uid);
+	sprintf(client->name, "%d", client->uid);
+
+	return (client);
 }
 
 t_args *new_args(t_server *server, t_client *client)
@@ -24,7 +26,7 @@ t_args *new_args(t_server *server, t_client *client)
 
 void *handle_client(void *arg)
 {
-	char	buff_out[BUFFER_SZ];
+	char	buff_out[BUFFER_SZ]; //maybe store them in client or other struct
 	char	buff_in[BUFFER_SZ / 2];
 	int		read_length;
 
@@ -39,18 +41,17 @@ void *handle_client(void *arg)
 		buff_out[0] = '\0';
 
 		strip_newline(buff_in);
+		printf("incoming msg from %s: %s\n",client->name, buff_in);
 
-		if (strlen(buff_in)) //ignore empty buffer
+		if (!strlen(buff_in)) //ignore empty buffer
 			continue;
 
-		if (buff_in[0] == '/' && (handle_cmd() == 1)) //make it enum
+		if (buff_in[0] == '/' && (handle_cmd(server, client, buff_out, buff_in) == QUIT)) //handle commands if present
 			break;
 		else
 		{
-			snprintf(buff_out, sizeof(buff_out),
-								"[%s] %s\r\n",
-								client->name,
-								buff_in);
+			snprintf(buff_out, sizeof(buff_out), "[%s] %s\r\n", client->name, buff_in);
+			printf("outgoing msg from %s: %s\n",client->name, buff_out);
 			send_message(server, buff_out, client->uid);
 		}
 
@@ -63,8 +64,3 @@ void *handle_client(void *arg)
 	return NULL;
 }
 
-// t_client *client = (t_client *)malloc(sizeof(t_client));
-// 		client->addr = client_addr;
-// 		client->connfd = connfd;
-// 		client->uid = server->uid++;
-// 		sprintf(client->name, "%d", client->uid);

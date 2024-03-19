@@ -24,7 +24,7 @@ void strip_newline(char *str)
 	}
 }
 
-void print__addr(struct sockaddr_in addr)
+void print_addr(struct sockaddr_in addr)
 {
 	printf("%d.%d.%d.%d",
 			addr.sin_addr.s_addr & 0xff,
@@ -34,14 +34,18 @@ void print__addr(struct sockaddr_in addr)
 }
 
 
-// move below to somewhere else
+// move below funcs to somewhere else
+
+// increment client counter
+// inform everyone that a new client joined
+// inform the client on topics
 void client_welcome(t_server *server, t_client *client, char *buff_out)
 {
 	server->client_count++; // client count is atomic but is there problem with accesing from server ptr
 
 	// log
 	printf("<< accept ");
-	print_client_addr(client->addr); // check how it works
+	print_addr(client->addr); // check how it works
 	printf(" referenced by %d\n", client->uid);
 
 	// inform everyone
@@ -63,20 +67,24 @@ void client_welcome(t_server *server, t_client *client, char *buff_out)
 
 }
 
+// close connection
+// inform everyone that a client left
+// remove client from queue
 void client_goodbye(t_server *server, t_client *client, char *buff_out)
 {
-	// close connection
+	// close connection & inform everyone
 	sprintf(buff_out, "<< %s has left\r\n", client->name);
 	send_message_all(server, buff_out);
 	close(client->connfd);
 
 	// remove client & yield thread
-	queue_remove(server, client);
+	queue_remove(server, client->uid);
 	printf("<< quit");
-	print_client_addr(client->addr);
-	printf(" referenced by %d\n, client->uid");
+	print_addr(client->addr);
+	printf(" referenced by %d\n", client->uid);
 
 	free(client);
 	server->client_count--;
 
 }
+

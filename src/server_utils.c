@@ -7,8 +7,12 @@ void ft_error(const char *msg)
 }
 
 // init the server struct
-void server_init(t_server *server, int port)
+t_server *new_server(int port)
 {
+	t_server *server;
+
+	server = (t_server *)malloc(sizeof(t_server));
+	
 	server->client_count = 0;
 	server->uid = 0;
 
@@ -22,6 +26,8 @@ void server_init(t_server *server, int port)
 	pthread_mutex_init(&(server->clients_mutex), NULL);
 	pthread_mutex_init(&(server->topic_mutex), NULL);
 
+	return (server);
+
 }
 
 // create a socket
@@ -30,12 +36,13 @@ void server_init(t_server *server, int port)
 void server_start(t_server *server)
 {
 	server->listenfd = socket(AF_INET, SOCK_STREAM, 0);
+
 	if (server->listenfd < 0)
 		ft_error("ERROR on opening socket");
 
-	signal(SIGPIPE, SIG_IGN); // ignore pipe signals
+	//signal(SIGPIPE, SIG_IGN); // ignore pipe signals
 
-	if (bind(server->listenfd, &server->server_addr, sizeof(server->server_addr)) < 0)
+	if (bind(server->listenfd, (struct sockaddr *)&server->server_addr, sizeof(server->server_addr)) < 0)
 		ft_error("ERROR on socket binding");
 
 	//The listen function places a socket in a state in which it is listening for an incoming connection.

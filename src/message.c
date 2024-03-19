@@ -8,8 +8,11 @@ void send_message(t_server *server, char *msg, int uid)
 	{
 		if (server->clients[i] && server->clients[i]->uid != uid)
 		{
+			printf("HELP\n");
 			if (write(server->clients[i]->connfd, msg, strlen(msg)) < 0)
 				ft_error("ERROR on writing to connfd");
+			send(server->clients[i]->connfd, msg, strlen(msg), 0);
+			printf("connfd: %d", server->clients[i]->connfd);
 		}
 	}
 	pthread_mutex_unlock(&(server->clients_mutex));
