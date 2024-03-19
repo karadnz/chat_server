@@ -29,10 +29,11 @@ int main(int argc, char **argv)
 		}
 
 		t_client *client = new_client(client_addr, connfd, server->uid++);
+		t_args *args = new_t_args(server, client);
 
 		//
 		queue_add(server, client);
-		pthread_create(&tid, NULL, &handle_client, (void *)client);
+		pthread_create(&tid, NULL, &handle_client, (void *)args);
 
 		sleep(1);
 	}
