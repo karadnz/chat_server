@@ -49,7 +49,7 @@ bind the socket with an ip and port.
 tell kernel to accept incoming connection requests to the socket.
 
 ### accept()
-`int socket (int family, int type, int protocol);`
+`int accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);`
 
 accept a request and create a new socket for it.
 
