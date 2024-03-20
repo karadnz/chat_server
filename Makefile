@@ -3,7 +3,7 @@ RM	= rm -f
 
 CC				= gcc
 CFLAGS_DEBUG	= -I ./include/ -fsanitize=address
-CFLAGS			= -I ./include/ # -Wall -Wextra -Werror
+CFLAGS			= -I ./include/ -pthread # -Wall -Wextra -Werror
 CDEBUG			= -g 
 
 
