@@ -66,6 +66,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	rm -rf client
 	@echo "Fully cleaned"
 	
 
