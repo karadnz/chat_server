@@ -13,9 +13,13 @@ SRC_DIR	= src
 OBJ_DIR	= obj
 BIN_DIR	= bin
 
+
+
 SRC =	server.c server_utils.c commands.c message.c\
 		client_utils.c queue.c \
 		utils.c \
+
+
 		
 		
 
@@ -28,20 +32,30 @@ BIN		= server
 NAME	= $(BIN_DIR)/$(BIN)
 
 
+
+
 all: $(NAME)
 
-# -g is default this target adds -fsanitize=adress
+# despite its name -g is default this target adds -fsanitize=adress
 debug: $(OBJ) | $(BIN_DIR)
 	@$(CC) $(CFLAGS_DEBUG) $(OBJ) $(ARC) $(FRMS) -o $(NAME)
-	@echo "cub3d data is compiled."
+	@echo "server data is compiled."
 
 $(NAME): $(OBJ) | $(BIN_DIR)
 	@$(CC) $(CFLAGS) $(OBJ) $(ARC) $(FRMS) -o $(NAME)
-	@echo "cub3d is compiled."
+	@echo "server is compiled."
+
+$(CLIENT): $(OBJ) | $(BIN_DIR)
+	@$(CC) $(CFLAGS) $(OBJ) $(ARC) $(FRMS) -o $(NAME)
+	@echo "server is compiled."
 
 # find better way to debug
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC)  $(CFLAGS) $(CDEBUG) -c $< -o $@
+
+client:
+	@gcc ./client.c -o client
+	@echo "client is compiled."
 
 run: all
 	./$(NAME) 20003
@@ -58,4 +72,4 @@ fclean: clean
 re: fclean
 	@make all
 
-.PHONY: all clean fclean run re
+.PHONY: all clean fclean run re client

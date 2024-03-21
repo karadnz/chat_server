@@ -1,5 +1,3 @@
-
-
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -15,13 +13,6 @@
 
 void error(const char *msg);
 
-/*
-client
-
-connect();
-*/
-
-//hostname port
 int main(int argc, char **argv)
 {
 	int sockfd;
@@ -61,10 +52,6 @@ int main(int argc, char **argv)
         error("ERROR connecting");
 
 
-
-	// print everything client send
-	// send client message
-
 	// stdin 0
 	//
 
@@ -85,16 +72,16 @@ int main(int argc, char **argv)
 
 		char buffer[256] = {0};
 
-		if (polls[0].revents & POLLIN) // to chech if POLLIN happened
+		if (polls[0].revents & POLLIN) // to read from stdin
 		{
 			read(0, buffer, 255);
-			send(sockfd, buffer, 255, 0);
+			send(sockfd, buffer, 255, 0); //send is  write() with additional flags
 		}
-		else if (polls[1].revents & POLLIN) // to read from server //read vs rcv
+		else if (polls[1].revents & POLLIN) // to read from server 
 		{
-			if (recv(sockfd, buffer, 255, 0) == 0)
+			if (recv(sockfd, buffer, 255, 0) == 0) //rcv is read() with additional flags
 			{
-				error("Server closed");
+				error("Connection closed");
 			}
 			printf("%s\n", buffer);
 		}
