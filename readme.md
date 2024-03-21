@@ -18,7 +18,7 @@ to run the client("make client" to compile):
 
 ## UML Diagram
 
-![diagram](/docs/diagram.png "diagram")
+![diagram](/docs/uml.png "diagram")
 
 ## Commands
 
