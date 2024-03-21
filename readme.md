@@ -12,7 +12,7 @@ to run the server:
 
 `./server port`
 
-to run the client(you have to compile it yourself):
+to run the client("make client" to compile):
 
 `./client localhost port`
 
